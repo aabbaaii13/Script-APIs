@@ -1,0 +1,12 @@
+{
+  "crons": [],
+  "security": {
+    "rateLimiting": [
+      {
+        "path": "/api/feedback",
+        "limit": 1,
+        "window": 900
+      }
+    ]
+  }
+}
