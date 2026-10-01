@@ -1,8 +1,8 @@
 export default async function handler(req, res) {
 	if (req.method !== "GET") {
-		return res.status(405).json({
+		return res.status(404).json({
 			success: false,
-			error: "You Have Been Banned"
+			error: "404 Not Found"
 		});
 	}
 
@@ -13,12 +13,12 @@ export default async function handler(req, res) {
 	if (mode === "search" && !q) {
 		return res.status(400).json({
 			success: false,
-			error: "Search Something"
+			error: "Search Something Please"
 		});
 	}
 
 	try {
-		const apiKey = process.env.RSCRIPTS_API_KEY;
+		const apiKey = process.env.RAK;
 
 		if (!apiKey) {
 			return res.status(500).json({
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
 	} catch (error) {
 		return res.status(503).json({
 			success: false,
-			error: "Search Is Unavailable"
+			error: "RScripts Is Unavailable"
 		});
 	}
 }
