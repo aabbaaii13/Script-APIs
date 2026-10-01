@@ -10,7 +10,7 @@ export default async function(req, res) {
 		res.setHeader('Allow', 'GET');
 		return res.status(404).end();
 	}
-	const key = process.env.RSCRIPTS_API_KEY;
+	const key = process.env.RAK;
 	if (!key) return res.status(500).json({ success: false, error: 'RSCRIPTS API KEY IS NOT ADDED' });
 	const mode = str(req.query?.mode);
 	const q = str(req.query?.q);
