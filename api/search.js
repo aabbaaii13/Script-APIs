@@ -6,10 +6,7 @@ function strip(list, bl) {
 	return list.filter(s => s && typeof s === 'object' && ![s.id, s.slug, s.rawScript].some(v => bl.has(str(v))));
 }
 export default async function(req, res) {
-	if (req.method !== 'GET') {
-		res.setHeader('Allow', 'GET');
-		return res.status(404).end();
-	}
+	if (req.method !== 'GET') {res.setHeader('Allow', 'GET'); return res.status(404).end();}
 	const key = process.env.RAK;
 	if (!key) return res.status(500).json({ success: false, error: 'RSCRIPTS API KEY IS NOT ADDED' });
 	const mode = str(req.query?.mode);
@@ -29,13 +26,9 @@ export default async function(req, res) {
 		let url = `${api}/scripts?sort=recommended&limit=20&page=1&includeScript=true`;
 		if (mode === 'trending') url = `${api}/trending`;
 		else if (q) url = `${api}/search?q=${encodeURIComponent(q)}&index=scripts&limit=20&page=1&includeScript=true`;
-
-		const up = await fetch(url, {
-			headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
-			cache: 'no-store'
-		});
+		const up = await fetch(url, {headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },cache: 'no-store'});
 		const body = await up.text();
-		if (!up.ok) return res.status(up.status).send(body);
+		if (!up.ok) {return res.status(up.status).json({success: false,error: 'RSCRIPTS API ERROR',status: up.status,response: body});}
 		let json;
 		try {
 			json = JSON.parse(body);
@@ -57,7 +50,6 @@ export default async function(req, res) {
 		}
 		res.setHeader('Cache-Control', 'no-store');
 		return res.status(200).json(json);
-	} catch {
-		return res.status(502).json({ success: false, error: 'REQUEST FAILED' });
+	} catch {return res.status(502).json({ success: false, error: 'REQUEST FAILED' });
 	}
 }
